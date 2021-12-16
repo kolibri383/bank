@@ -3,9 +3,7 @@ class User(val name: String,
            val card: String,
            val pinCode: String) {
 
-
     fun inputCard():Boolean = askYN("Вы хотите вставить карту в банкомат? (y/n)")
-
 
     private fun askYN(message: String):Boolean{
         println(message)
@@ -28,12 +26,8 @@ class User(val name: String,
              println("ПИН-КОД состоит их четырёх цифр")
              pin = readLine()
          }
-
          return pin.substring(0,4)
-
     }
-
-
 
     fun chooseAction(screen: String):Char{
         print("Ваше дейстивие: ")
@@ -53,7 +47,6 @@ class User(val name: String,
         }
         return choose!!
     }
-
 
 
      fun depositMoney():Double {
@@ -79,7 +72,5 @@ class User(val name: String,
     }
 
      fun pickUpTheCard(): Boolean = askYN("Забрать карту? (y/n)")
-
-
 
 }

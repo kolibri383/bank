@@ -1,14 +1,13 @@
-import java.time.LocalDateTime
 
 class ATM(val userData: List<BankAccount>){
-    var authorized = false
     var cardAvailability = false
     var currentUser: BankAccount? = null
     var attemptsToEnterThePincode = 0
 
 
-
     fun scanCart(cardNumber: String):Boolean{
+        if(cardAvailability)
+            return false
         val account = findAccountByCard(cardNumber)
         if(account==null){
             println("Ваша карта не читается.\nПожалуйста, обратитесь в отделение банка.")
@@ -53,6 +52,4 @@ class ATM(val userData: List<BankAccount>){
         currentUser?.cash = currentUser?.cash?.plus(-money)!!
         return true
     }
-
-
 }

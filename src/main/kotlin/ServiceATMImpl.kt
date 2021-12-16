@@ -7,10 +7,13 @@ class ServiceATMImpl(private val atm: ATM, private val user: User) : ServiceATM 
         if(user.inputCard()){
             if(atm.scanCart(user.card))
                 enterPinCode()
+            else
+                errorCardNumber()
         }
     }
 
     override fun enterPinCode() {
+        atm.attemptsToEnterThePincode = 0
         enterPinCodeScreen()
         var pin = user.enterPinCode()
         while(!atm.pinCodeValidation(pin)&&atm.attemptsToEnterThePincode<=3){
@@ -19,8 +22,8 @@ class ServiceATMImpl(private val atm: ATM, private val user: User) : ServiceATM 
         }
         if(atm.attemptsToEnterThePincode>3){
             errorPinCodeScreen()
-            stop()
-        }else
+        }
+        else
             mainMenu()
     }
 
@@ -37,7 +40,6 @@ class ServiceATMImpl(private val atm: ATM, private val user: User) : ServiceATM 
     override fun withdrawMoney() {
         withdrawScreen()
         moneyOperation("withdraw")
-
     }
 
     private fun moneyOperation(screen: String){
@@ -56,7 +58,6 @@ class ServiceATMImpl(private val atm: ATM, private val user: User) : ServiceATM 
                 else
                     depositErrorScreen()
             }
-
             'b'-> mainMenu()
             else -> stop()
         }
@@ -64,9 +65,8 @@ class ServiceATMImpl(private val atm: ATM, private val user: User) : ServiceATM 
 
 
     override fun pickUpTheCard() {
-        if(!user.pickUpTheCard())
+        if (!user.pickUpTheCard())
             enterPinCode()
-
     }
 
     override fun stop() {
@@ -127,7 +127,6 @@ class ServiceATMImpl(private val atm: ATM, private val user: User) : ServiceATM 
         mainMenu()
     }
 
-
     private fun depositOkScreen(){
         println("""
              ___________________________________________
@@ -156,8 +155,6 @@ class ServiceATMImpl(private val atm: ATM, private val user: User) : ServiceATM 
         """.trimIndent())
     }
 
-
-
     private fun balanceScreen(balance:Double){
             println("""
              ___________________________________________
@@ -184,7 +181,6 @@ class ServiceATMImpl(private val atm: ATM, private val user: User) : ServiceATM 
             |   КАРТУ                     |_____|       |
             |___________________________________________|
         """.trimIndent())
-
     }
 
     private fun enterPinCodeScreen(){
@@ -213,7 +209,7 @@ class ServiceATMImpl(private val atm: ATM, private val user: User) : ServiceATM 
             |           |____|____|____|____|           |
             |___________________________________________|
         """.trimIndent())
-        Thread.sleep(1000)
+        Thread.sleep(600)
     }
 
     private fun depositScreen(){
@@ -258,5 +254,18 @@ class ServiceATMImpl(private val atm: ATM, private val user: User) : ServiceATM 
         }
     }
 
-
+    private fun errorCardNumber(){
+        println("""
+             ___________________________________________
+            |                 БАНКмини                  |
+            |___________________________________________|    
+            |           Ваша карта не читается          |
+            |  Пожалуйста,                              |
+            |  обратитесь в                             |
+            |  отделение Банка.                         |
+            |                                           | 
+            |___________________________________________|
+        """.trimIndent())
+        Thread.sleep(500)
+    }
 }
