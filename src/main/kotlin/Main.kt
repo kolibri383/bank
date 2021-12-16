@@ -1,73 +1,27 @@
-import java.time.LocalDateTime
 
 fun main(args: Array<String>) {
-    val user = User("Alex",1000.0, "1234567812345678", "1234")
-    val a = BankAccount("Alex","1234567812345678","1234")
-    val userData = listOf(a)
+
+
+    val users = listOf(
+        User("Alex",1000.0, "1234567812345678", "1234"),
+        User("Nick",1000.0, "123423344545678", "1111"),
+        User("Alice",1000.0, "1212343488554433", "0000")
+    )
+
+    val userData = listOf(
+        BankAccount("Alex","1234567812345678","1234",10000.00),
+        BankAccount("Nick","123423344545678", "1111",1000.00),
+        BankAccount("Alice","1212343488554433", "0000", 5000.00),
+    )
+
+
     val atm  = ATM(userData)
-    val service =  ServiceATMImpl(atm,user)
-    Process(service).start()
+    val service =  ServiceATMImpl(atm,users[0])
+    service.inputCard()
+
+    println("Имя ${users[0].name}\nНаличные ${users[0].cash}\nСредства в банке ${userData[0].cash}")
 
 }
 
 
 
-
-
-class Process(val service: ServiceATM){
-    var authorized = false
-
-    fun start(){
-        mainScreen()
-        println("Вы вставили карту")
-        service.inputCard()
-    }
-
-    fun mainScreen(){
-        println("""
-             ___________________________________________
-            |                 БАНКмини                  |
-            |___________________________________________|    
-            |   ПОЖАЛУЙСТА              ___________     |
-            |   ВСТАВЬТЕ                |_|     |_| 
-            |   ВАШУ                      |     |       |
-            |   КАРТУ                     |_____|       |
-            |___________________________________________|
-        """.trimIndent())
-    }
-
-    fun mainMenu(){
-        val date = LocalDateTime.now().toString().substringBefore('T')
-        println("""
-             ___________________________________________
-            |                 БАНКмини                  |
-            |___________________________________________|    
-            |                               ${date}  |
-            |               ГЛАВНОЕ МЕНЮ                |
-            |-------------------------------------------|
-            |1.Запросить баланс  |   2.Получить наличные|
-            |3.Внести наличные   |   q.Выход            |
-            |____________________|______________________|
-        """.trimIndent())
-    }
-
-    fun chooseAction(){
-        if(authorized==true){
-            authorizedAction()
-        }
-    }
-
-    fun authorizedAction(){
-        mainMenu()
-        var choose = readLine()?.get(0)
-        when(choose){
-            '1' -> service.checkTheBalance()
-            '2' -> service.withdrawMoney()
-            '3' -> service.depositMoney()
-            'q' -> service.stop()
-            else -> authorizedAction()
-        }
-    }
-
-
-}
